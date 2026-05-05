@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import EventCard from '../components/EventCard';
 import Loader from '../components/Loader';
+const API = import.meta.env.VITE_API_URL;
 
 const STATUS_FILTERS = ['All','Open','Active','Full','Closed'];
 // Cancelled events are never visible to players
@@ -13,7 +14,7 @@ export default function Events() {
   const [status,  setStatus]  = useState('All');
 
   useEffect(() => {
-    axios.get('/api/events')
+    axios.get(`${API}/api/events`)
       .then(r => setEvents(r.data))
       .catch(console.error)
       .finally(() => setLoading(false));

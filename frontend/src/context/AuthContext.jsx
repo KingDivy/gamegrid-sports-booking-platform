@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (token) {
-      axios.get('/api/auth/profile')
+      axios.get(`${API}/api/auth/profile`)
         .then(r => setUser(r.data))
         .catch(() => { localStorage.removeItem('gg_token'); setToken(null); })
         .finally(() => setLoading(false));
@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = async (email, password) => {
-    const r = await axios.post('/api/auth/login', { email, password });
+    const r = await axios.post(`${API}/api/auth/login`, { email, password });
     localStorage.setItem('gg_token', r.data.token);
     setToken(r.data.token);
     setUser(r.data.user);
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (data) => {
-    const r = await axios.post('/api/auth/register', data);
+    const r = await axios.post(`${API}/api/auth/register`, data);
     localStorage.setItem('gg_token', r.data.token);
     setToken(r.data.token);
     setUser(r.data.user);

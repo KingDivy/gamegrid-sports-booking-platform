@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader, { InlineLoader } from '../components/Loader';
+const API = import.meta.env.VITE_API_URL;
 
 const PAYMENT_OPTIONS = [
   { value:'online', icon:'💳', label:'Online',          desc:'Cards, Netbanking, Wallets via Razorpay' },
@@ -35,7 +36,7 @@ export default function EventDetail() {
   });
 
   const fetchEvent = useCallback(() => {
-    axios.get(`/api/events/${id}`)
+    axios.get(`${API}/api/events/${id}`)
       .then(r => setEvent(r.data))
       .catch(() => navigate('/events'))
       .finally(() => setLoading(false));
@@ -70,7 +71,7 @@ export default function EventDetail() {
         handler: async (response) => {
           try {
             // Verify payment & register team in one step
-            await axios.post(`/api/events/${id}/event-verify`, {
+            await axios.post(`${API}/api/events/${id}/event-verify`, {
               razorpay_order_id:   response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature:  response.razorpay_signature,
@@ -116,7 +117,7 @@ export default function EventDetail() {
 
       if (isOnline && hasFee) {
         // Step 1: Create Razorpay order
-        const { data: orderData } = await axios.post(`/api/events/${id}/event-order`, {
+        const { data: orderData } = await axios.post(`${API}/api/events/${id}/event-order`, {
           teamName: form.teamName.trim(),
         });
 
@@ -125,7 +126,7 @@ export default function EventDetail() {
         if (success) navigate('/my-bookings');
       } else {
         // Cash payment or free event — direct registration
-        await axios.post(`/api/events/${id}/register`, {
+        await axios.post(`${API}/api/events/${id}/register`, {
           ...form,
           members: form.members ? form.members.split(',').map(m => m.trim()).filter(Boolean) : [],
         });

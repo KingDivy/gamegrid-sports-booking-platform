@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader';
+const API = import.meta.env.VITE_API_URL;
 
 export default function OwnerSlots() {
   const [venues,   setVenues]   = useState([]);
@@ -27,7 +28,7 @@ export default function OwnerSlots() {
   const [slotsLoaded, setSlotsLoaded] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/owner/venues')
+    axios.get(`${API}/api/owner/venues`)
       .then(r => {
         setVenues(r.data);
         if (r.data[0]) setSel(s => ({ ...s, venueId: r.data[0]._id, sport: r.data[0].sports?.[0] || '' }));
@@ -45,7 +46,7 @@ export default function OwnerSlots() {
 
     try {
       // Check day-off status first
-      const dayoffsRes = await axios.get(`/api/owner/venues/${sel.venueId}/dayoffs`);
+      const dayoffsRes = await axios.get(`${API}/api/owner/venues/${sel.venueId}/dayoffs`);
       const match = dayoffsRes.data.find(d => d.sport === sel.sport && d.date === sel.date);
       if (match) {
         setIsDayOff(true);
@@ -56,7 +57,7 @@ export default function OwnerSlots() {
         return;
       }
 
-      const r = await axios.get('/api/owner/slots', { params: sel });
+      const r = await axios.get(`${API}/api/owner/slots`, { params: sel });
       setSlots(r.data);
       setSlotsLoaded(true);
     } catch (e) {
@@ -69,7 +70,7 @@ export default function OwnerSlots() {
 
   const toggleBlock = async (slotId) => {
     try {
-      await axios.put(`/api/owner/slots/${slotId}/block`);
+      await axios.put(`${API}/api/owner/slots/${slotId}/block`);
       setSlots(slots.map(s => s._id === slotId ? { ...s, isBlocked: !s.isBlocked } : s));
     } catch (e) { toast.error('Failed to toggle slot'); }
   };
@@ -85,7 +86,7 @@ export default function OwnerSlots() {
     if (!manualForm.playerName) { toast.error('Player name is required'); return; }
     setMbLoading(true);
     try {
-      await axios.post('/api/owner/bookings/manual', {
+      await axios.post(`${API}/api/owner/bookings/manual`, {
         venueId:     sel.venueId,
         sport:       sel.sport,
         slotIds:     selectedIds,
@@ -105,7 +106,7 @@ export default function OwnerSlots() {
   const markDayOff = async () => {
     setDayOffLoading(true);
     try {
-      await axios.post(`/api/owner/venues/${sel.venueId}/dayoff`, {
+      await axios.post(`${API}/api/owner/venues/${sel.venueId}/dayoff`, {
         sport:  sel.sport,
         date:   sel.date,
         reason: dayOffInput.trim(),
@@ -125,7 +126,7 @@ export default function OwnerSlots() {
     if (!confirm(`Re-open ${sel.sport} on ${sel.date}?`)) return;
     setDayOffLoading(true);
     try {
-      await axios.delete(`/api/owner/venues/${sel.venueId}/dayoff`, {
+      await axios.delete(`${API}/api/owner/venues/${sel.venueId}/dayoff`, {
         data: { sport: sel.sport, date: sel.date },
       });
       toast.success('Day off removed — venue re-opened ✅');

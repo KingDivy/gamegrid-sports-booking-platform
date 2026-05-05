@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader';
+const API = import.meta.env.VITE_API_URL;
 
 const STATUS_OPTIONS = ['Confirmed','Completed','Cancelled'];
 
@@ -38,7 +39,7 @@ export default function OwnerBookings() {
     if (filters.sport)  params.sport  = filters.sport;
     if (filters.status) params.status = filters.status;
     try {
-      const r = await axios.get('/api/owner/bookings', { params });
+      const r = await axios.get(`${API}/api/owner/bookings`, { params });
       setBookings(r.data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -49,7 +50,7 @@ export default function OwnerBookings() {
   const cancelBooking = async (id) => {
     if (!confirm('Cancel this booking? This will free up the slots.')) return;
     try {
-      await axios.put(`/api/owner/bookings/${id}/status`, { status: 'Cancelled' });
+      await axios.put(`${API}/api/owner/bookings/${id}/status`, { status: 'Cancelled' });
       toast.success('Booking cancelled');
       load();
     } catch (e) { toast.error(e.response?.data?.error || 'Failed'); }
