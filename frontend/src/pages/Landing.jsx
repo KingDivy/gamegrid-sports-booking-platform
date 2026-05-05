@@ -248,6 +248,10 @@ export default function Landing() {
         <div className="container footer-inner">
           <span className="footer-brand">GAMEGRID</span>
           <span className="footer-copy">© 2026 GameGrid. All rights reserved.</span>
+          <span className="footer-copy">Made By Divy Desai</span>
+          <a href="mailto:divydesai39@gmail.com" className="footer-copy">
+            Contact divy
+          </a>
         </div>
       </footer>
     </div>
