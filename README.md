@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/GameGrid-Sports%20Booking-4a7cf7?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzRhN2NmNyIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiPvCfj59</svg>" alt="GameGrid Banner" />
-
 # GameGrid — Sports Venue Booking Platform
 
 **Discover, book, and play at premium sports venues across Ahmedabad.**  
