@@ -3,9 +3,10 @@ const express  = require('express');
 const mongoose = require('mongoose');
 const cors     = require('cors');
 
-app.use(cors());
+
 const app  = express();
 const PORT = process.env.PORT || 5000;
+app.use(cors());
 
 // ─── Validate critical env vars on startup ────────────────────
 const REQUIRED_ENV = ['MONGO_URI', 'JWT_SECRET'];
