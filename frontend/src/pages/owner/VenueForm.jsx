@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { InlineLoader } from '../../components/Loader';
-const API = import.meta.env.VITE_API_URL;
 
 const ALL_SPORTS = ['Box Cricket','Badminton','Tennis','Football','Basketball'];
 const ALL_AMENITIES = ['Parking','Changing Room','Cafeteria','Washrooms','First Aid','CCTV','Floodlights','Scoreboard'];
@@ -28,7 +27,7 @@ export default function OwnerVenueForm() {
 
   useEffect(() => {
     if (!isEdit) return;
-    axios.get(`${API}/api/owner/venues`).then(r => {
+    axios.get(`/api/owner/venues`).then(r => {
       const v = r.data.find(x => x._id === id);
       if (!v) { navigate('/owner/venues'); return; }
       setForm({
@@ -82,10 +81,10 @@ export default function OwnerVenueForm() {
       if (imageFile) fd.append('image', imageFile);
 
       if (isEdit) {
-        await axios.put(`${API}/api/owner/venues/${id}`,fd,{ headers: { 'Content-Type': 'multipart/form-data' } });
+        await axios.put(`/api/owner/venues/${id}`,fd,{ headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('Venue updated!');
       } else {
-        await axios.post(`${API}/api/owner/venues`,fd,{ headers: { 'Content-Type': 'multipart/form-data' } });
+        await axios.post(`/api/owner/venues`,fd,{ headers: { 'Content-Type': 'multipart/form-data' } });
         toast.success('Venue created!');
       }
       navigate('/owner/venues');

@@ -8,7 +8,6 @@ const STATUS_BADGE = {
   Cancelled:  'badge-red',
   Completed:  'badge-blue',
 };
-const API = import.meta.env.VITE_API_URL;
 
 function isSlotPast(booking) {
   const now = new Date();
@@ -38,8 +37,8 @@ export default function MyBookings() {
     setLoading(true);
     try {
       const [br, er] = await Promise.all([
-        axios.get(`${API}/api/bookings`),
-        axios.get(`${API}/api/events/my/registrations`),
+        axios.get(`/api/bookings`),
+        axios.get(`/api/events/my/registrations`),
       ]);
       setBookings(br.data);
       setRegistrations(er.data);
@@ -52,7 +51,7 @@ export default function MyBookings() {
   const cancelBooking = async (id) => {
     if (!confirm('Cancel this booking?')) return;
     try {
-      await axios.put(`${API}/api/bookings/${id}/cancel`);
+      await axios.put(`/api/bookings/${id}/cancel`);
       toast.success('Booking cancelled');
       load();
     } catch (e) { toast.error(e.response?.data?.error || 'Failed'); }
@@ -61,7 +60,7 @@ export default function MyBookings() {
   const cancelRegistration = async (eventId) => {
     if (!confirm('Cancel your event registration?')) return;
     try {
-      await axios.delete(`${API}/api/events/${eventId}/cancel-registration`);
+      await axios.delete(`/api/events/${eventId}/cancel-registration`);
       toast.success('Registration cancelled');
       load();
     } catch (e) { toast.error(e.response?.data?.error || 'Failed'); }

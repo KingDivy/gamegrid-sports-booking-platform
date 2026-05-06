@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader';
-const API = import.meta.env.VITE_API_URL;
 const STATUS_BADGE = { Open:'badge-green', Active:'badge-blue', Full:'badge-orange', Closed:'badge-gray', Cancelled:'badge-red' };
 
 export default function OwnerEvents() {
@@ -14,7 +13,7 @@ export default function OwnerEvents() {
   const navigate = useNavigate();
 
   const load = () => {
-    axios.get(`${API}/api/events/owner/list`)
+    axios.get(`/api/events/owner/list`)
       .then(r => setEvents(r.data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -25,14 +24,14 @@ export default function OwnerEvents() {
   const cancelEvent = async (id) => {
     if (!confirm('Cancel this event?')) return;
     try {
-      await axios.put(`${API}/api/events/owner/${id}/cancel`);
+      await axios.put(`/api/events/owner/${id}/cancel`);
       toast.success('Event cancelled');
       load();
     } catch(e) { toast.error(e.response?.data?.error || 'Failed'); }
   };
 
   const viewRegistrations = async (eventId) => {
-    const r = await axios.get(`${API}/api/events/owner/${eventId}/registrations`);
+    const r = await axios.get(`/api/events/owner/${eventId}/registrations`);
     setTeams(r.data.teams);
     setRegModal(eventId);
   };
@@ -115,7 +114,7 @@ function RegistrationsModal({ eventId, teams, onClose, onRefresh }) {
 
     setSubmitting(true);
     try {
-      await axios.post(`${API}/api/events/owner/${eventId}/register-offline`, {
+      await axios.post(`/api/events/owner/${eventId}/register-offline`, {
         teamName:        form.teamName.trim(),
         playerName:      form.playerName.trim(),
         playerPhone:     form.playerPhone.trim(),

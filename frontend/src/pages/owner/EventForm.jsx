@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { InlineLoader } from '../../components/Loader';
-const API = import.meta.env.VITE_API_URL;
 
 
 export default function OwnerEventForm() {
@@ -20,12 +19,12 @@ export default function OwnerEventForm() {
   });
 
   useEffect(() => {
-    axios.get(`${API}/api/owner/venues`).then(r => {
+    axios.get(`/api/owner/venues`).then(r => {
       setVenues(r.data);
       if (r.data[0] && !isEdit) setForm(f => ({ ...f, venueId: r.data[0]._id }));
     });
     if (isEdit) {
-      axios.get(`${API}/api/events/owner/list`).then(r => {
+      axios.get(`/api/events/owner/list`).then(r => {
         const ev = r.data.find(e => e._id === id);
         if (!ev) { navigate('/owner/events'); return; }
         setForm({
@@ -50,10 +49,10 @@ export default function OwnerEventForm() {
     try {
       const payload = { ...form, entryFee: form.entryFee || 0 };
       if (isEdit) {
-        await axios.put(`${API}/api/events/owner/${id}`, payload);
+        await axios.put(`/api/events/owner/${id}`, payload);
         toast.success('Event updated!');
       } else {
-        await axios.post(`${API}/api/events/owner/create`, payload);
+        await axios.post(`/api/events/owner/create`, payload);
         toast.success('Event created!');
       }
       navigate('/owner/events');

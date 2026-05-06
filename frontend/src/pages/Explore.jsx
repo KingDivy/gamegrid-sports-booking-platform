@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import VenueCard from '../components/VenueCard';
 import Loader from '../components/Loader';
-const API = import.meta.env.VITE_API_URL;
+
 
 const SPORTS = ['all','Box Cricket','Badminton','Tennis','Football'];
 
@@ -20,7 +20,7 @@ export default function Explore() {
       if (filters.search)   params.search = filters.search;
       if (filters.minPrice) params.minPrice = filters.minPrice;
       if (filters.maxPrice) params.maxPrice = filters.maxPrice;
-      const r = await axios.get(`${API}/api/venues`, { params });
+      const r = await axios.get(`/api/venues`, { params });
       setVenues(r.data);
     } catch (err) {
       console.error(err);

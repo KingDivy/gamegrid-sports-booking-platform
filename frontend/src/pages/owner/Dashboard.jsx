@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../../components/Loader';
-const API = import.meta.env.VITE_API_URL;
+
 
 function StatCard({ icon, label, value, color }) {
   return (
@@ -22,7 +22,7 @@ export default function OwnerDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${API}/api/owner/revenue`)
+    axios.get(`/api/owner/revenue`)
       .then(r => setRevenue(r.data))
       .catch(console.error)
       .finally(() => setLoading(false));

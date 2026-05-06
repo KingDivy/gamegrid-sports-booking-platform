@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader';
-const API = import.meta.env.VITE_API_URL;
+
 
 export default function OwnerVenues() {
   const [venues, setVenues] = useState([]);
@@ -11,7 +11,7 @@ export default function OwnerVenues() {
   const navigate = useNavigate();
 
   const load = () => {
-    axios.get(`${API}/api/owner/venues`)
+    axios.get(`/api/owner/venues`)
       .then(r => setVenues(r.data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -22,7 +22,7 @@ export default function OwnerVenues() {
   const deleteVenue = async (id, name) => {
     if (!confirm(`Delete venue "${name}"? This cannot be undone.`)) return;
     try {
-      await axios.delete(`${API}/api/owner/venues/${id}`);
+      await axios.delete(`/api/owner/venues/${id}`);
       toast.success('Venue deleted');
       load();
     } catch(e) { toast.error(e.response?.data?.error || 'Failed'); }

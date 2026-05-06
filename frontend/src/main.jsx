@@ -4,7 +4,7 @@ import App from './App.jsx';
 import axios from 'axios';
 import './index.css';
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || "https://gamegrid-backend-1wwu.onrender.com";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

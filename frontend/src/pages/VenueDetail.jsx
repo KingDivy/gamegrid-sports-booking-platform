@@ -12,7 +12,6 @@ const PAYMENT_OPTIONS = [
   { value: 'cash',   icon: '💵', label: 'Cash at Venue',  desc: 'Pay when you arrive' },
 ];
 
-const API = import.meta.env.VITE_API_URL;
 
 /* ─── Razorpay script loader ─────────────────────────────────────────────── */
 function loadRazorpayScript() {
@@ -52,7 +51,7 @@ export default function VenueDetail() {
 
   /* ── Fetch venue ── */
   useEffect(() => {
-    axios.get(`${API}/api/venues/${id}`)
+    axios.get(`/api/venues/${id}`)
       .then(r => { setVenue(r.data); setSelectedSport(r.data.sports?.[0] || ''); })
       .catch(() => navigate('/explore'))
       .finally(() => setLoading(false));
@@ -64,7 +63,7 @@ export default function VenueDetail() {
     setSlotsLoading(true);
     setSelectedSlots([]);
     setDayOffInfo(null);
-    axios.get(`${API}/api/venues/${id}/slots`, { params: { date: selectedDate, sport: selectedSport } })
+    axios.get(`/api/venues/${id}/slots`, { params: { date: selectedDate, sport: selectedSport } })
       .then(r => {
         if (r.data.closed) { setDayOffInfo({ reason: r.data.reason }); setSlots([]); }
         else setSlots(r.data);
@@ -104,7 +103,7 @@ export default function VenueDetail() {
       const loaded = await loadRazorpayScript();
       if (!loaded) { toast.error('Failed to load payment SDK. Check your connection.'); return; }
 
-      const { data } = await axios.post(`${API}/api/payments/create-order`, {
+      const { data } = await axios.post(`/api/payments/create-order`, {
         venueId:     id,
         sport:       selectedSport,
         slotIds:     selectedSlots.map(s => s._id),
@@ -134,7 +133,7 @@ export default function VenueDetail() {
         },
         handler: async (response) => {
           try {
-            await axios.post(`${API}/api/payments/verify`, {
+            await axios.post(`/api/payments/verify`, {
               razorpay_order_id:   response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature:  response.razorpay_signature,
@@ -167,7 +166,7 @@ export default function VenueDetail() {
     if (!upiId.trim()) { toast.error('Please enter your UPI ID or confirm the QR payment'); return; }
     setBooking(true);
     try {
-      await axios.post(`${API}/api/bookings`, {
+      await axios.post(`/api/bookings`, {
         venueId:       id,
         sport:         selectedSport,
         slotIds:       selectedSlots.map(s => s._id),
@@ -190,7 +189,7 @@ export default function VenueDetail() {
   const handleCash = async () => {
     setBooking(true);
     try {
-      await axios.post(`${API}/api/bookings`, {
+      await axios.post(`/api/bookings`, {
         venueId:       id,
         sport:         selectedSport,
         slotIds:       selectedSlots.map(s => s._id),
